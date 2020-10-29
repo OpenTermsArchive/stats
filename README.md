@@ -26,3 +26,9 @@ To generate a json report:
 ```
 python bin/generate_stats.py --path ../CGUs-versions --outdir reports
 ```
+
+To generate a HTML page
+```
+jupyter nbconvert --execute --to html --no-input notebooks/report_page.ipynb
+```
+The output HTML file will be `notebooks/report_page.html`
