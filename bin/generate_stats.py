@@ -27,9 +27,10 @@ def main(path, outdir):
         cgu = CGU(file_path)
         all_stats[cgu.fullname] = cgu.to_dict()
 
-    _save_to_file(all_stats, outdir, f"stats_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
+    fileout = f"stats_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+    _save_to_file(all_stats, outdir, fileout)
 
-    logging.info(f"Saved stats in {outdir}/stats.json")
+    logging.info(f"Saved stats in {outdir}/{fileout}")
 
 def _save_to_file(data: dict, outdir, filename):
     out_path = Path(outdir)
