@@ -8,14 +8,14 @@ logging.basicConfig(level=logging.INFO)
 
 # download CMU pronunciation data to compute number of syllables
 try:
-    nltk.data.find('corpora/cmudict.zip')
+    nltk.data.find('corpora/cmudict')
 except LookupError:
     logging.info("Downloading cmudict pronunciation data (this should happen just once, next runs will be faster)")
     nltk.download('cmudict')
 
 # download punkt for sentence tokenizer
 try:
-    nltk.data.find('tokenizers/punkt.zip')
+    nltk.data.find('tokenizers/punkt')
 except LookupError:
     logging.info("Downloading punkt tokenizer (this should happen just once, next runs will be faster)")
     nltk.download('punkt')

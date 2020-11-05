@@ -18,6 +18,14 @@ The default assumption is that both repos are side-by-side in the same folder on
 - Add your virtual environment as a Jupyter kernel `python -m ipykernel install --name=${your_kernel}`
 
 ### Run
+
+You should set your `PYTHONPATH` to the root of the repo so that everything runs smoothly.
+
+```sh
+cd CGUs-stats # if not already there
+export PYTHONPATH=.
+```
+
 To get help:
 ```
 python bin/generate_stats.py --help
@@ -35,3 +43,13 @@ jupyter nbconvert --ExecutePreprocessor.kernel_name=${your_kernel} --execute --t
 ```
 
 The output HTML file will be `notebooks/report_page.html`
+
+### Testing
+
+We use `pytest` for testing which allows for test autodiscovery. Simply run:
+
+```
+python -m pytest
+```
+
+to run the test suite.
