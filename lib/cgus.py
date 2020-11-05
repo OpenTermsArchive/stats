@@ -34,10 +34,10 @@ class CGU():
 
     def __init__(self, path: PosixPath):
         self._path = path
-        self.name = self._path.name
-        self.source = self._path.as_posix().split("/")[-2]
-        self.fullname = f"{self.source} - {self.name}".removesuffix(".md")
-        self.cgu_type = f"{self.name}".removesuffix(".md") #TODO check that this is the way to go about it
+        self.name = self._path.name.removesuffix(".md")
+        self.service = self._path.as_posix().split("/")[-2]
+        self.fullname = f"{self.service} - {self.name}"
+        self.document_type = f"{self.name}"
         self.raw_content = self._path.read_text()
         self.tokens = self._TOKENIZER.tokenize(self.raw_content)
 
@@ -47,7 +47,7 @@ class CGU():
             "Serialize" the CGU object to key/value pairs.
         """
         return {
-            "cgu_type": self.cgu_type,
+            "document_type": self.document_type,
             "num_words": len(self)
         }
 
