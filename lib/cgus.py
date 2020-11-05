@@ -11,6 +11,7 @@ try:
     nltk.data.find('corpora/cmudict.zip')
 except LookupError:
     logging.info("Downloading cmudict pronunciation data (this should happen just once, next runs will be faster)")
+    nltk.download('cmudict')
 
 class CGUsDataset():
     """
