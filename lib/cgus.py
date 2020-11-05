@@ -13,6 +13,13 @@ except LookupError:
     logging.info("Downloading cmudict pronunciation data (this should happen just once, next runs will be faster)")
     nltk.download('cmudict')
 
+# download punkt for sentence tokenizer
+try:
+    nltk.data.find('tokenizers/punkt.zip')
+except LookupError:
+    logging.info("Downloading punkt tokenizer (this should happen just once, next runs will be faster)")
+    nltk.download('punkt')
+
 class CGUsDataset():
     """
     Helper class for handling CGUs Versions
