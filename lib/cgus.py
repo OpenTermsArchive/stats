@@ -6,11 +6,11 @@ import nltk
 
 logging.basicConfig(level=logging.INFO)
 
-# download CMU prononciation data to compute number of syllables
+# download CMU pronunciation data to compute number of syllables
 try:
     nltk.data.find('corpora/cmudict.zip')
 except LookupError:
-    logging.info("Downloading cmudict prononciation data (this should happen just once, next runs will be faster)")
+    logging.info("Downloading cmudict pronunciation data (this should happen just once, next runs will be faster)")
 
 class CGUsDataset():
     """
@@ -31,13 +31,13 @@ class CGUsDataset():
 
 class CGU():
     """
-    A CGU object, and the main building bloc for our algorithms.
+    A CGU object, and the main building block for our algorithms.
     """
 
     # Remove all punctuation when tokenizing text
-    _TOKENIZER = nltk.tokenize.RegexpTokenizer(r'\w+')
+    _TOKENIZER = nltk.tokenize.RegexpTokenizer(r'[a-zA-Z0-9]+')
 
-    # Carnegie Mellon University (CMU) prononciation data
+    # Carnegie Mellon University (CMU) pronunciation data
     _PRONDICT = nltk.corpus.cmudict.dict()
 
     def __init__(self, path: PosixPath):
@@ -78,18 +78,18 @@ class CGU():
     
     def _num_syllables(self, word):
         """
-            Count the number of syllables in a word using CMU's prononciation dictionary
+            Count the number of syllables in a word using CMU's pronunciation dictionary
         """
 
         # in the CMU dictionnary, vowels end with a digit e.g. 'AH0'
-        def _vowels_count(prononciation):
-            return len([phoneme_code for phoneme_code in prononciation if phoneme_code[-1].isdigit()])
+        def _vowels_count(pronunciation):
+            return len([phoneme_code for phoneme_code in pronunciation if phoneme_code[-1].isdigit()])
         
-        cmu_prononciation = self._PRONDICT.get(word)
+        cmu_pronunciation = self._PRONDICT.get(word)
         
         # if word not in cmu dictionary -> 1
-        if cmu_prononciation is None:
+        if cmu_pronunciation is None:
             return 1
 
-        # if more than one prononciation, take the longest
-        return max(map(_vowels_count, cmu_prononciation))
+        # if more than one pronunciation, take the longest
+        return max(map(_vowels_count, cmu_pronunciation))
