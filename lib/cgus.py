@@ -2,6 +2,7 @@ from datetime import datetime
 import json
 import logging
 from pathlib import Path, PosixPath
+import re
 
 import nltk
 
@@ -66,27 +67,36 @@ class CGU():
             self.fullname = f"{self.service} - {self.name}"
         
         self.document_type = f"{self.name}"
-        self.raw_content = self._path.read_text()
+        self.raw_content = self.__strip_images(self._path.read_text())
         self.tokens = [token.lower() for token in self._TOKENIZER.tokenize(self.raw_content)]
         # these are useful for computing readability measures
         self.sentence_count = len(nltk.tokenize.sent_tokenize(self.raw_content))
         self.syllable_count = sum([self._num_syllables(token) for token in self.tokens])
         # readability measures
         #https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests
-        self.readability = 206.835 - 1.015 * (len(self) / self.sentence_count) - 84.6 * (self.syllable_count / len(self))
-        self.readability_grade_level = 0.39 * (len(self) / self.sentence_count) + 11.8 * (self.syllable_count / len(self)) - 15.59
+        try:
+            self.readability = 206.835 - 1.015 * (len(self) / self.sentence_count) - 84.6 * (self.syllable_count / len(self))
+            self.readability_grade_level = 0.39 * (len(self) / self.sentence_count) + 11.8 * (self.syllable_count / len(self)) - 15.59
+        except ZeroDivisionError as e:
+            logging.warning(f"Could not compute readability measures for {self.fullname} as either sentence_count or word_count is 0.")
+            self.readability = None
+            self.readability_grade_level = None
 
 
     def to_dict(self) -> dict:
         """
             "Serialize" the CGU object to key/value pairs.
         """
-        return {
+        output = {
+            "service": self.service,
             "document_type": self.document_type,
             "num_words": len(self),
             "readability": self.readability,
             "readability_grade_level": self.readability_grade_level
         }
+        if self.is_historical:
+            output["date"] = str(self.version_date) # as string so that it can be serialized to json
+        return output
 
     def __str__(self):
         return f"\n{self.fullname}\nIs Historical Data: {self.is_historical}\nLength: {len(self)}\n\n{self.raw_content[:500]} ..."
@@ -116,3 +126,13 @@ class CGU():
 
         # if more than one pronunciation, take the longest
         return max(map(_vowels_count, cmu_pronunciation))
+
+    @staticmethod
+    def __strip_images(raw_text: str) -> str:
+        """
+        images in historical cgus greatly penalize the algo's performance
+        this removes all image lines
+        """
+        text = re.sub(r"(\!\[\]\(.*\))", " ", raw_text)
+        text = re.sub(r"([=\-]+)", " ", text)
+        return text
