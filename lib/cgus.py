@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import logging
 from pathlib import Path, PosixPath
@@ -40,6 +41,8 @@ class CGUsDataset():
 class CGU():
     """
     A CGU object, and the main building block for our algorithms.
+        The `is_historical` argument allows for parsing a historical CGUs-versions
+        dataset which has a slightly different naming convention.
     """
 
     # Remove all punctuation when tokenizing text
@@ -48,11 +51,20 @@ class CGU():
     # Carnegie Mellon University (CMU) pronunciation data
     _PRONDICT = nltk.corpus.cmudict.dict()
 
-    def __init__(self, path: PosixPath):
+    def __init__(self, path: PosixPath, is_historical: bool = False):
         self._path = path
-        self.name = self._path.name.removesuffix(".md")
-        self.service = self._path.as_posix().split("/")[-2]
-        self.fullname = f"{self.service} - {self.name}"
+        self.is_historical = is_historical
+        # parse info from file path differently depending on the mode
+        if self.is_historical:
+            self.version_date = datetime.fromisoformat(self._path.name.removesuffix(".md"))
+            self.name = self._path.as_posix().split("/")[-2]
+            self.service = self._path.as_posix().split("/")[-3]
+            self.fullname = f"{self.service} - {self.name} - {self.version_date}"
+        else:
+            self.name = self._path.name.removesuffix(".md")
+            self.service = self._path.as_posix().split("/")[-2]
+            self.fullname = f"{self.service} - {self.name}"
+        
         self.document_type = f"{self.name}"
         self.raw_content = self._path.read_text()
         self.tokens = [token.lower() for token in self._TOKENIZER.tokenize(self.raw_content)]
@@ -77,7 +89,10 @@ class CGU():
         }
 
     def __str__(self):
-        return f"\n{self.fullname}\nLength: {len(self)}\n{self.raw_content[:500]}"
+        return f"\n{self.fullname}\nIs Historical Data: {self.is_historical}\nLength: {len(self)}\n\n{self.raw_content[:500]} ..."
+
+    def __repr__(self):
+        return self.__str__()
 
     def __len__(self):
         """Length of a CGU is its number of words/tokens."""
