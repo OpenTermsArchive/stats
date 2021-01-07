@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 debug_mode = os.getenv("PY_DEBUG")
 
 @click.command()
-@click.option('-p', '--path', default="../CGUs/cgus-dataset/", help="Path to your local cgus-dataset folder.")
+@click.option('-p', '--path_to_dataset', prompt = True, help="Path to your local cgus-dataset folder.")
 @click.option('-o', '--outdir', default="./reports", help="Output folder for the generated statistics.")
 def cli(path, outdir):
     return main(path, outdir)
