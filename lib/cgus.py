@@ -6,6 +6,8 @@ import re
 
 import nltk
 
+import config
+
 logging.basicConfig(level=logging.INFO)
 
 # download CMU pronunciation data to compute number of syllables
@@ -57,7 +59,7 @@ class CGU():
         self.is_historical = is_historical
         # parse info from file path differently depending on the mode
         if self.is_historical:
-            self.version_date = datetime.fromisoformat(self._path.name.removesuffix(".md"))
+            self.version_date = datetime.strptime(self._path.name.removesuffix(".md"), config.DATASET_DATE_FORMAT)
             self.name = self._path.as_posix().split("/")[-2]
             self.service = self._path.as_posix().split("/")[-3]
             self.fullname = f"{self.service} - {self.name} - {self.version_date}"
