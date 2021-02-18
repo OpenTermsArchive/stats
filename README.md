@@ -1,6 +1,6 @@
-# CGUs-stats
+# Open Terms Archive - Stats
 
-Generate statistics on [CGUs-versions](https://github.com/ambanum/CGUs-versions).
+Generate statistics on [Open Terms Archive - versions](https://github.com/ambanum/CGUs-versions).
 
 ## Get Started :rocket:
 ### Get the data and code on your local machine
