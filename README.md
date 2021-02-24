@@ -1,14 +1,14 @@
 # Open Terms Archive - Stats
 
-Generate statistics on [Open Terms Archive - versions](https://github.com/ambanum/CGUs-versions).
+Generate statistics on [Open Terms Archive - versions](https://github.com/ambanum/OpenTermsArchive-versions).
 
 ## Get Started :rocket:
 ### Get the data and code on your local machine
 ```sh
-# Clone the latest version of the CGUs-versions repository
-git clone git@github.com:ambanum/CGUs-versions.git
+# Clone the latest version of the OpenTermsArchive-versions repository
+git clone git@github.com:ambanum/OpenTermsArchive-versions.git
 # Clone the latest version of this repository
-git clone git@github.com:ambanum/CGUs-stats.git
+git clone git@github.com:ambanum/OpenTermsArchive-stats.git
 ```
 The default assumption is that both repos are side-by-side in the same folder on your local machine — though you can always point to a different path.
 
@@ -22,7 +22,7 @@ The default assumption is that both repos are side-by-side in the same folder on
 You should set your `PYTHONPATH` to the root of the repo so that everything runs smoothly.
 
 ```sh
-cd CGUs-stats # if not already there
+cd OpenTermsArchive-stats # if not already there
 export PYTHONPATH=.
 ```
 
@@ -33,7 +33,7 @@ python bin/generate_stats.py --help
 
 To generate a json report:
 ```
-python bin/generate_stats.py --path ../CGUs-versions --outdir reports
+python bin/generate_stats.py --path ../OpenTermsArchive-versions --outdir reports
 ```
 
 To generate a HTML page
